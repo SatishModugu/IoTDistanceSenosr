@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pi4j.io.gpio.RaspiPin;
+
 @RestController
 public class SensorController {
 	@RequestMapping("/")
@@ -18,8 +20,13 @@ public class SensorController {
 	}
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	@GetMapping(path="/sensor-data/device/{deviceID}")
-	public SensorData sensorFetchData(@PathVariable String deviceID ) {
+	public SensorData sensorFetchDataFrom1(@PathVariable String deviceID ) {
 		LocalDateTime now = LocalDateTime.now();
-		return new SensorData(deviceID, SensorValue.getDistance(),dtf.format(now));
+		return new SensorData(deviceID, SensorValue.getDistance(RaspiPin.GPIO_00, RaspiPin.GPIO_02),dtf.format(now));
+	}
+	@GetMapping(path="/sensor-data/devicedummy/{deviceID}")
+	public SensorData sensorFetchDataDummy(@PathVariable String deviceID ) {
+		LocalDateTime now = LocalDateTime.now();
+		return new SensorData(deviceID, "12.1",dtf.format(now));
 	}
 }

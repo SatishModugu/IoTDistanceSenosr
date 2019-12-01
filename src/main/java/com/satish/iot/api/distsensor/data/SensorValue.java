@@ -4,6 +4,7 @@ import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinPullResistance;
 import com.pi4j.io.gpio.RaspiPin;
 
@@ -12,13 +13,13 @@ public class SensorValue {
 	public static GpioPinDigitalOutput gpioTrigger;
 	public static GpioPinDigitalInput gpioEcho;
 
-	public static String getDistance() {
+	public static String getDistance(Pin triggerPin, Pin echoPin) {
 
 		GpioController gpio = GpioFactory.getInstance();
 		if (gpioTrigger == null)
-			gpioTrigger = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00);
+			gpioTrigger = gpio.provisionDigitalOutputPin(triggerPin);
 		if (gpioEcho == null)
-			gpioEcho = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN); // Echo pin as																							// INPUT
+			gpioEcho = gpio.provisionDigitalInputPin(echoPin, PinPullResistance.PULL_DOWN); // Echo pin as																							// INPUT
 		long startTime = 0;
 		long endTime = 0;
 		while (true) {
